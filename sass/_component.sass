@@ -1,0 +1,934 @@
+@import "_variable.sass"
+@function bg($imageName)
+  @return url($image-path + $imageName)
+
+@function bgc($color,$opacity:1)
+  @return rgba($color,$opacity)
+
+=prefix($property,$value)
+  -webkit-#{$property}: $value
+  -o-#{$property}: $value
+  -moz-#{$property}: $value
+  -ms-#{$property}: $value
+  #{$property}: $value
+
+
+=placeholders
+  &::-webkit-input-placeholder
+    @content
+
+  &:-moz-placeholder
+    @content
+
+  &::-moz-placeholder
+    @content
+
+  &:-ms-input-placeholder
+    @content
+
+  &:placeholder
+    @content
+
+
+
+=loader($img:true,$color:#000)
+  .loader
+    position: fixed
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    z-index: 100003
+    @if $img
+      background: bg('loader.gif') no-repeat center center
+    background-color: bgc($color,.3)
+    div
+      display: block
+      position: relative
+      left: 50%
+      top: 50%
+      width: 150px
+      height: 150px
+      margin: -75px 0 0 -75px
+      border-radius: 50%
+      border: 3px solid transparent
+      border-top-color: $color
+      @include prefix('animation',spin 2s linear infinite)
+      z-index: 1001
+      &:before
+        content: ""
+        position: absolute
+        top: 5px
+        left: 5px
+        right: 5px
+        bottom: 5px
+        border-radius: 50%
+        border: 3px solid transparent
+        border-top-color: lighten($color,20%)
+        @include prefix('animation',spin 2s linear infinite)
+
+      &:after
+        content: ""
+        position: absolute
+        top: 15px
+        left: 15px
+        right: 15px
+        bottom: 15px
+        border-radius: 50%
+        border: 3px solid transparent
+        border-top-color: lighten($color,40%)
+        @include prefix('animation',spin 1s linear infinite)
+
+
+
+
+
+// is stand for 'icon sprite'
+=is($init : true,$spriteDtls...)
+  @if $init
+    .is
+      display: inline-block
+      vertical-align: middle
+
+    @each $iconName,$x,$y,$spriteWidth,$spriteHeight in $spriteDtls
+      .is-#{$iconName}
+        background: bg('sprite.png') no-repeat $x + px $y + px transparent
+        width: $spriteWidth + px
+        height: $spriteHeight + px
+
+
+
+  @else if $init == false
+    @each $iconName,$x,$y in $spriteDtls
+      .is-#{$iconName}
+        background-position:  $x + px $y + px
+
+
+
+
+
+=sprite($img:'sprite.png',$x:0,$y:0,$sx:'auto',$sy:'auto')
+  background: bg($img) no-repeat ($x+px) ($y+px) / $sx $sy
+
+
+@function em($size,$basesize:$rootSize)
+  @return ($size/$basesize)+ em
+
+
+@function rem($size)
+  @return $size / $rootSize + rem
+
+
+=transition($prop : all .5s ease)
+  @include prefix( 'transition',$prop)
+
+=vam($left:'50%',$top:'50%')
+  position: absolute
+  left: unquote($left)
+  top: unquote($top)
+  @include transform(translate(-(unquote($left)),-(unquote($top))))
+
+=transform($prop...)
+  @include prefix( 'transform',$prop)
+
+=sizing($prop)
+  @include prefix( 'box-sizing',$prop)
+
+=break-word($prop)
+  @include prefix( 'word-break',$prop)
+
+=clrfix
+  &:after
+    clear: both
+    content: ''
+    display: block
+
+
+
+=clear($count , $increment)
+  %clear,
+  .clear
+    clear: both
+
+  @for $i from 1 through $count
+    .clear#{$increment * $i}
+      @extend %clear
+      height: $increment * $i+px
+
+
+
+%reset
+  margin: 0
+  padding: 0
+  border: 0
+  font-size: 100%
+  font: inherit
+  vertical-align: baseline
+
+=reset
+  /*Reset css start*/
+  a,
+  abbr,
+  acronym,
+  address,
+  article,
+  aside,
+  audio,
+  big,
+  blockquote,
+  body,
+  canvas,
+  caption,
+  center,
+  cite,
+  code,
+  dd,
+  del,
+  details,
+  dfn,
+  div,
+  dl,
+  dt,
+  em,
+  embed,
+  fieldset,
+  figcaption,
+  figure,
+  footer,
+  form,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  header,
+  hgroup,
+  html,
+  iframe,
+  img,
+  ins,
+  kbd,
+  label,
+  legend,
+  li,
+  mark,
+  menu,
+  nav,
+  object,
+  ol,
+  output,
+  p,
+  pre,
+  q,
+  ruby,
+  s,
+  samp,
+  section,
+  small,
+  span,
+  strike tt,
+  summary,
+  table,
+  tbody,
+  td,
+  tfoot,
+  th,
+  thead,
+  time,
+  tr,
+  ul,
+  var,
+  video
+    @extend %reset
+
+  article,
+  aside,
+  details,
+  figcaption,
+  figure,
+  footer,
+  header,
+  hgroup,
+  menu,
+  nav,
+  section
+    display: block
+
+  ol,
+  ul
+    list-style: none
+
+  blockquote,
+  q
+    quotes: none
+    &:after,
+    &:before
+      content: ''
+
+
+  table
+    border-collapse: collapse
+    border-spacing: 0
+
+  /*Reset css end*/
+
+=headings($count)
+  @for $i from 2 through 6
+    $heading-size: $heading-size - $count
+    h#{$i}
+      font-size: em($heading-size)
+      @extend %h1
+
+
+
+=socialMedia($ext, $prop...)
+  @each $list in $prop
+    .#{$list}
+      background: bg($list + ($ext))
+
+
+
+=wh($prop)
+  width: $prop +px
+  height: $prop +px
+
+=globalCss
+  /*Global Css starts*/
+  a
+    color: bgc($link-color,.5)
+    text-decoration: none
+    outline: none
+    @include transition(all 0.5s ease)
+
+  body
+    line-height: 1
+    font: em($body-size) $pf
+    color: $body-color
+    padding-bottom: $footer-height
+    position: relative
+    background: $body-bg
+
+  *
+    @include sizing(border-box)
+    @include break-word(keep-all)
+    &:after,
+    &:before
+      @extend *
+
+
+  img
+    max-width: 100%
+    vertical-align: middle
+
+  .container
+    margin: 0 auto
+    width: $cntWidth
+    max-width: $cntMxWidth
+
+  .fl
+    float: left
+
+  .fr
+    float: right
+
+  .text-right
+    text-align: right
+
+  .text-left
+    text-align: left
+
+  .text-center
+    text-align: center
+
+  .error
+    color: #F00
+
+  p
+    font: 300 em($para-size) / em($para-line-height) $fv1
+    letter-spacing: 2px
+    padding-bottom: 14px
+    &.info
+      background: bg('icon-info.png') no-repeat scroll left center
+      font: 16px "Open Sans",serif
+      padding: 10px 0 10px 33px
+
+
+  // including clear
+  @include clear(3, 20)
+  // heading property
+  %h1,
+  h1
+    color: $heading-color
+    // letter-spacing: 2px
+    font: 400 em($heading-size) $pf
+    padding-bottom: $headingSpacer
+
+  @include headings($heading-size-differnce)
+  .desktop-only
+    display: block
+
+  .mobile-only,
+  .tab-mobile-only,
+  .tab-only
+    display: none
+
+  .loader
+    background: bg('loader.gif') no-repeat scroll center center bgc(#203651)
+    height: 100%
+    left: 0
+    position: fixed
+    top: 0
+    width: 100%
+    z-index: 99999
+
+  .loader.loaded
+    top: -100%
+
+  /*Global Css End*/
+
+// types al stand for (Animated Lables)
+// types sl stand for (Side by side Lables)
+// types tl stand for (On Top Lables)
+=input($prop...)
+  @each $type in $prop
+    input[type=#{$type}]
+      @content
+
+
+
+=form($type : 'tl')
+  .form-layout
+    .form-row
+      .form-field
+        padding-bottom: 20px
+        &.mandatory
+          position: relative
+          label
+            &:after
+              color: #f00
+              content: "*"
+              display: inline-block
+              margin-left: 4px
+              vertical-align: top
+              z-index: 100
+
+
+
+
+      &:last-child
+        .form-field
+          padding-bottom: 0
+
+
+      label
+        display: block
+        padding: 10px
+        font: em(14) $pf
+        color: #b2b2b4
+        text-transform: uppercase
+
+
+
+  /*form tag*/
+  input[type="date"],
+  input[type="email"],
+  input[type="number"],
+  input[type="password"],
+  input[type="text"],
+  select,
+  textarea
+    width: 100%
+    padding: 10px
+    border: none
+    border-bottom: 1px solid #f5f5f6
+    margin: 0
+    font: em(12) $pf
+    outline: none
+    @include transition
+    &:active,
+    &:focus
+      outline: none
+
+
+  select
+    background: none
+    width: 100%
+    padding: 9px 10px
+    border: none
+    outline: none
+    cursor: pointer
+
+  textarea
+    height: $txth
+    resize: none
+    font: $txtfs $pf
+
+  input[type="checkbox"],
+  input[type="radio"]
+    display: inline-block
+    vertical-align: middle
+    margin: 0 5px 0 0
+
+  /*Form Tag end*/
+  span.has-error
+    background: none repeat scroll 0 0 #f00
+    color: #fff
+    display: inline-block
+    font-size: 14px
+    margin-top: 10px
+    padding: 4px 10px
+    position: relative
+    &:before
+      background: bg('error-bg.png') no-repeat scroll center center rgba(0, 0, 0, 0)
+      content: ""
+      display: block
+      height: 6px
+      left: 12px
+      position: absolute
+      top: -6px
+      width: 12px
+
+
+  /*Common Buttons*/
+  a.box-btn,
+  button.box-btn,
+  input[type=button],
+  input[type=reset],
+  input[type=submit]
+    display: inline-block
+    margin: 0 5px 0 0
+    background-color: $boxBtnBg
+    border: none
+    cursor: pointer
+    padding: 15px 25px
+    color: $boxBtnColor
+    font: 400 em(16) $pf
+    letter-spacing: 2px
+    text-transform: uppercase
+    vertical-align: middle
+    text-decoration: none
+    text-align: center
+    @include transition
+    &.full-btn
+      display: block
+      width: 100%
+
+    &.rounded
+      border-radius: 50px
+
+    &.active,
+    &:hover
+      background-color: $boxBtnBgHvr
+
+    &.secondary-btn
+      background-color: #fff
+      border: 1px solid #bdbdbd
+      color: #bdbdbd
+      &.active,
+      &:hover
+        // background-color: $secondBoxBtnBghvr
+
+
+
+  /*hack for mozzila */
+  @-moz-document url-prefix()
+    a.box-btn
+      padding-top: 16px
+      padding-bottom: 16px
+
+
+  /*hack for mozzila end*/
+  // Common buttons end
+  // Custom input types
+  .input-type-select
+    // border: 1px solid #ddd
+    overflow: hidden
+    position: relative
+    &:after
+      background: bg('custom-select.png') no-repeat scroll center center
+      content: ""
+      display: block
+      height: 40px
+      position: absolute
+      right: 0
+      top: 0
+      width: 41px
+      z-index: 99999
+
+
+  @if($type == 'al')
+    .animated-label
+      .form-row
+        .form-field
+          position: relative
+          padding-bottom: 40px
+          label
+            position: absolute
+            left: 0
+            top: 0
+            width: 100%
+            pointer-events: none
+            @include transition((all .5s ease))
+
+          &.filled
+            label
+              @include transform(translate(-10px, -90%))
+
+
+
+
+
+
+  /*form end*/
+
+=responsiveTable($count:10)
+  .responsive-table
+    dl
+      li
+        float: left
+        .col
+          float: left
+          padding: 10px 7px
+
+
+      @for $i from 1 through $count
+        .total-col-#{$i}
+          .col
+            width: unquote(100 / $i + '%')
+
+
+
+      dt
+        @include clrfix
+        li
+          .col
+            font: 600 16px $pf
+            background-color: #ddd
+
+
+
+      dd
+        @include clrfix
+        li
+          @include clrfix
+          .col
+            font: 400 16px $pf
+
+
+
+
+
+  @include renderInto(0,1024)
+    .responsive-table
+      @include clrfix
+      dl
+        margin: 0 -1%
+        dt
+          display: none
+
+        dd
+          float: left
+          width: 48%
+          border: 1px solid #ddd
+          margin: 0 1% 20px
+          li
+            float: none
+            &:first-child
+              background: #ddd
+
+
+
+
+
+
+  @include renderInto(0,640)
+    .responsive-table
+      dl
+        margin: 0
+        dd
+          width: 100%
+          margin: 0 0 20px
+
+
+
+
+  @include renderInto(0,320)
+    .responsive-table
+      dl
+        dd
+          .col
+            width: 100% !important
+
+
+
+
+
+
+=renderInto($minSize,$maxsize)
+  $maxViewPort: max-width
+  $minViewPort: min-width
+  @media ( $minViewPort : ($minSize + px)) and ( $maxViewPort : ($maxsize + px))
+    @content
+
+
+=grid($ext,$totalClums:12)
+  .grid-layout
+    margin: 0 -1%
+
+  .grid-#{$ext}
+    float: left
+    padding: 0 1%
+
+  @for $i from 1 through $totalClums
+    $k: (100% / $totalClums)
+    .grid-#{$ext}-#{$i}
+      width: $k * $i
+      @extend .grid-#{$ext}
+
+
+
+=listItem($types...)
+  ol.list,
+  ul.list
+    margin-left: 27px
+    padding-bottom: 14px
+    font: em(20) $sf
+    li
+      padding: 5px 0 5px 7px
+
+    &.bullet
+      margin-left: 10px
+      li
+        background: bg('bullet.png') no-repeat scroll left center rgba(0, 0, 0, 0)
+        padding: 5px 0 5px 18px
+
+
+
+  @each $listType in $types
+    ol.#{$listType},
+    ul.#{$listType}
+      li
+        list-style-type: $listType
+
+
+
+
+=messages($params...)
+  /*Session Error messages*/
+  .message
+    border: medium none
+    font: 18px $pf
+    margin: 0 0 15px
+    padding: 10px
+    position: relative
+    @each $session-message, $baseColor in $params
+      &.#{$session-message}
+        background-color: lighten($baseColor,40%)
+        color: $baseColor
+
+
+
+  /*Session error message end*/
+
+=pagination
+  /*Pagination*/
+  .pagination
+    padding-bottom: 20px
+    @include clrfix
+    &.at-right
+      text-align: right
+
+    &.at-left
+      text-align: left
+
+    &.at-center
+      text-align: center
+
+    ul
+      display: inline-block
+      border: 1px solid #b2b2b2
+      background-color: #eee
+      border-left: none
+
+    %paginationHover
+      background-color: #0079C1
+      color: #fff
+
+    li
+      border-left: 1px solid #b2b2b2
+      padding: 0
+      vertical-align: middle
+      float: left
+      a,
+      span
+        display: block
+        padding: 5px 13px
+        &:hover
+          @extend %paginationHover
+
+
+      &.active
+        a
+          @extend %paginationHover
+
+
+
+
+  /*Pagination End*/
+
+=table
+  %td
+    color: #535353
+    margin: 0
+    min-width: 120px
+    padding: 10px
+    text-align: left
+    width: 120px
+
+  .table
+    width: 100%
+    background: #fff
+    font-size: 12px
+    margin-bottom: 15px
+    &.with-strip
+      tr:nth-child(2n+1)
+        td
+          background-color: #eee
+
+
+
+    &.with-border
+      border-left: 1px solid #dbdbe9
+      border-top: 1px solid #dbdbe9
+      td
+        border-bottom: 1px solid #dbdbe9
+        border-right: 1px solid #dbdbe9
+
+
+    td
+      @extend %td
+
+    th
+      background: #444
+      color: #fff
+      font-size: em(16)
+      text-transform: uppercase
+      @extend %td
+
+    .status
+      color: #16930d
+
+
+  /*Table end*/
+
+=overlay
+  /*overlay */
+  .overlay-bg
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0.5)
+    height: 100%
+    left: 0
+    margin: 0 auto
+    position: fixed
+    top: 0
+    width: 100%
+    z-index: 100000
+
+  .overlay
+    height: 100%
+    left: 0
+    margin: 0 auto
+    position: fixed
+    top: 0
+    width: 100%
+    z-index: 100001
+    visibility: hidden
+    .overlay-box
+      display: table
+      height: inherit
+      margin: 0 auto
+      width: 600px
+      .content
+        display: table-cell
+        vertical-align: middle
+
+      .closeBtn
+        background: none repeat scroll 0 0 #FFFFFF
+        border-radius: 5px
+        color: #2A78CB
+        cursor: pointer
+        font: bold 17px/25px Arial, Helvetica, sans-serif
+        height: 25px
+        padding: 0
+        position: absolute
+        right: 10px
+        text-align: center
+        top: 10px
+        width: 25px
+        z-index: 1002
+
+      .overlay-header
+        background: none repeat scroll 0 0 #4066ae
+        color: #fff
+        font: 600 19px "Open Sans", serif
+        padding: 9px 10px
+        position: relative
+
+      .overlay-content
+        padding: 20px 10px
+        background: none repeat scroll 0 0 #fff
+
+      .overlay-footer
+        padding: 9px 10px
+        background: #e3e3e3
+        text-align: right
+
+
+
+
+=cssDisplay
+  .ds-table
+    display: table
+    width: 100%
+    height: inherit
+
+  .ds-table-cell
+    display: table-cell
+    vertical-align: middle
+
+  .ds-block
+    display: block
+
+  .ds-inline-block
+    display: inline-block
+    vertical-align: middle
+
+  .ds-inline
+    display: inline
+
+
+=keyframes($animationName)
+  @keyframes #{$animationName}
+    @content
+
+  @-webkit-keyframes #{$animationName}
+    @content
+
+  @-moz-keyframes #{$animationName}
+    @content
+
+  @-o-keyframes #{$animationName}
+    @content
+
+
+=animation($animate...)
+  $max: length($animate)
+  $animations: ''
+  @for $i from 1 through $max
+    $animations: #{$animations} + nth($animate, $i)
+    @if $i < $max
+      $animations: #{$animations} + ", "
+  -webkit-animation: $animations
+  -moz-animation: $animations
+  -o-animation: $animations
+  animation: $animations
