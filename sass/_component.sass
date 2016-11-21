@@ -294,6 +294,8 @@
   height: $prop +px
 
 =globalCss
+  \:root
+    font-size: $rootSize + px
   /*Global Css starts*/
   a
     color: bgc($link-color,.5)
@@ -395,41 +397,78 @@
     input[type=#{$type}]
       @content
 
+=customChooseField($size : 20px)
+  %cmn
+    position: relative
+    +input(checkbox,radio)
+      position: absolute
+      opacity: 0
+      visibility: hidden
+
+    label
+      display: block
+      font: $size - 2 $pf
+      margin: 10px 0
+      padding-left: $size + 10
+      cursor: pointer
+      &:before,&:after
+        position: absolute
+        content: ''
+        left: 0
+        width: $size
+        height: $size
+        z-index: 1
+        +transition
+      &::before
+        border: 1px solid $pc
+      &:after
+        width: $size / 2
+        height: $size / 2
+        z-index: 2
+        top: $size / 4
+        left: $size/4
+
+  .input-type-checkbox,.input-type-radio
+    @extend %cmn
+  .input-type-radio
+    +input(radio)
+      &:checked
+        \+label
+          &:after
+            +transform(scale(1))
+    label
+      &:before,&:after
+        border-radius: 50%
+      &:after
+        +transform(scale(0))
+        background: $pc
+        width: $size / 2
+        height: $size / 2
+        border: 1px solid $pc
+  .input-type-checkbox
+    +input(checkbox)
+      &:checked
+        \+label
+          &:after
+            opacity: 1
+    label
+      &:after
+        border-right: 1px solid $pc
+        border-bottom: 1px solid $pc
+        width: $size/3
+        left: $size / 4 + 2
+        +transform(rotate(30deg))
+        opacity: 0
 
 
-=form($type : 'tl')
-  .form-layout
-    .form-row
-      .form-field
-        padding-bottom: 20px
-        &.mandatory
-          position: relative
-          label
-            &:after
-              color: #f00
-              content: "*"
-              display: inline-block
-              margin-left: 4px
-              vertical-align: top
-              z-index: 100
 
 
 
 
-      &:last-child
-        .form-field
-          padding-bottom: 0
-
-
-      label
-        display: block
-        padding: 10px
-        font: em(14) $pf
-        color: #b2b2b4
-        text-transform: uppercase
 
 
 
+=form
   /*form tag*/
   input[type="date"],
   input[type="email"],
@@ -458,11 +497,8 @@
     border: none
     outline: none
     cursor: pointer
-
   textarea
-    height: $txth
     resize: none
-    font: $txtfs $pf
 
   input[type="checkbox"],
   input[type="radio"]
@@ -488,8 +524,6 @@
       position: absolute
       top: -6px
       width: 12px
-
-
   /*Common Buttons*/
   a.box-btn,
   button.box-btn,
@@ -555,33 +589,6 @@
       top: 0
       width: 41px
       z-index: 99999
-
-
-  @if($type == 'al')
-    .animated-label
-      .form-row
-        .form-field
-          position: relative
-          padding-bottom: 40px
-          label
-            position: absolute
-            left: 0
-            top: 0
-            width: 100%
-            pointer-events: none
-            @include transition((all .5s ease))
-
-          &.filled
-            label
-              @include transform(translate(-10px, -90%))
-
-
-
-
-
-
-  /*form end*/
-
 =responsiveTable($count:10)
   .responsive-table
     dl
@@ -590,35 +597,22 @@
         .col
           float: left
           padding: 10px 7px
-
-
       @for $i from 1 through $count
         .total-col-#{$i}
           .col
             width: unquote(100 / $i + '%')
-
-
-
       dt
         @include clrfix
         li
           .col
             font: 600 16px $pf
             background-color: #ddd
-
-
-
       dd
         @include clrfix
         li
           @include clrfix
           .col
             font: 400 16px $pf
-
-
-
-
-
   @include renderInto(0,1024)
     .responsive-table
       @include clrfix
