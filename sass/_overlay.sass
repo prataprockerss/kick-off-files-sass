@@ -1,0 +1,33 @@
+.overlay-box
+  position: fixed
+  width: 100%
+  height: 100%
+  left: 0
+  top: 0
+  .overlay-bg
+    position: fixed
+    left: 0
+    top: 0
+    width: 100%
+    height: 100%
+    background-color: bgc(#000,.5)
+    z-index: 1
+  .overlay-container
+    font: em(18) $pf
+    z-index: 2
+    width: rem(800)
+    +vam
+    max-width: 800px
+    margin: 0 auto
+    background: #fff
+    .overlay-header
+      padding: 20px
+      background-color: $pc
+      color: lighten($pc,100%)
+    .overlay-content
+      padding: 20px
+      min-height: 200px
+    .overlay-footer
+      padding: 20px
+      background-color: $sc
+      color: lighten($sc,100%)
