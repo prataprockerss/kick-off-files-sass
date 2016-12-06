@@ -74,7 +74,7 @@
       border-radius: 50%
       border: 3px solid transparent
       border-top-color: $color
-      @include prefix('animation',spin 2s linear infinite)
+      +prefix('animation',spin 2s linear infinite)
       z-index: 1001
       &:before
         content: ""
@@ -86,7 +86,7 @@
         border-radius: 50%
         border: 3px solid transparent
         border-top-color: lighten($color,20%)
-        @include prefix('animation',spin 2s linear infinite)
+        +prefix('animation',spin 2s linear infinite)
 
       &:after
         content: ""
@@ -98,7 +98,7 @@
         border-radius: 50%
         border: 3px solid transparent
         border-top-color: lighten($color,40%)
-        @include prefix('animation',spin 1s linear infinite)
+        +prefix('animation',spin 1s linear infinite)
 
 
 
@@ -132,31 +132,31 @@
   background: bg($img) no-repeat ($x+px) ($y+px) / $sx $sy
 
 
-@function em($size,$basesize:$rootSize)
+@function rem($size,$basesize:$rootSize)
   @return ($size/$basesize)+ em
 
 
-@function rem($size)
+@function rrem($size)
   @return $size / $rootSize + rem
 
 
 =transition($prop : all .5s ease)
-  @include prefix( 'transition',$prop)
+  +prefix( 'transition',$prop)
 
 =vam($left:'50%',$top:'50%')
   position: absolute
   left: unquote($left)
   top: unquote($top)
-  @include transform(translate(-(unquote($left)),-(unquote($top))))
+  +transform(translate(-(unquote($left)),-(unquote($top))))
 
 =transform($prop...)
-  @include prefix( 'transform',$prop)
+  +prefix( 'transform',$prop)
 
 =sizing($prop)
-  @include prefix( 'box-sizing',$prop)
+  +prefix( 'box-sizing',$prop)
 
 =break-word($prop)
-  @include prefix( 'word-break',$prop)
+  +prefix( 'word-break',$prop)
 
 =clrfix
   &:after
@@ -298,7 +298,7 @@
   @for $i from 2 through 6
     $heading-size: $heading-size - $count
     h#{$i}
-      font-size: em($heading-size)
+      font-size: rem($heading-size)
       @extend %h1
 
 
@@ -322,19 +322,18 @@
     color: bgc($link-color,.5)
     text-decoration: none
     outline: none
-    @include transition(all 0.5s ease)
+    +transition(all 0.5s ease)
 
   body
     line-height: 1
-    font: em($body-size) $pf
+    font: rem($body-size) $pf
     color: $body-color
-    padding-bottom: $footer-height
     position: relative
     background: $body-bg
 
   *
-    @include sizing(border-box)
-    @include break-word(keep-all)
+    +sizing(border-box)
+    +break-word(keep-all)
     &:after,
     &:before
       @extend *
@@ -343,32 +342,22 @@
   img
     max-width: 100%
     vertical-align: middle
-
   .container
     margin: 0 auto
-    width: $cntWidth
+    width: 100%
     max-width: $cntMxWidth
-
   .fl
     float: left
-
   .fr
     float: right
-
   .text-right
     text-align: right
-
   .text-left
     text-align: left
-
   .text-center
     text-align: center
-
-  .error
-    color: #F00
-
   p
-    font: 300 em($para-size) / em($para-line-height) $fv1
+    font: 300 rem($para-size) / rem($para-line-height) $fv1
     letter-spacing: 2px
     padding-bottom: 14px
     &.info
@@ -378,16 +367,16 @@
 
 
   // including clear
-  @include clear(3, 20)
+  +clear(3, 20)
   // heading property
   %h1,
   h1
     color: $heading-color
     // letter-spacing: 2px
-    font: 400 em($heading-size) $pf
+    font: 400 rem($heading-size) $pf
     padding-bottom: $headingSpacer
 
-  @include headings($heading-size-differnce)
+  +headings($heading-size-differnce)
   .desktop-only
     display: block
 
@@ -501,51 +490,46 @@
     width: 100%
     padding: 10px
     border: none
-    border-bottom: 1px solid #f5f5f6
     margin: 0
-    font: em(12) $pf
+    font: rem(12) $pf
     outline: none
-    @include transition
+    +transition
     &:active,
     &:focus
       outline: none
-
-
   select
     background: none
-    width: 100%
     padding: 9px 10px
-    border: none
-    outline: none
     cursor: pointer
   textarea
     resize: none
-
+    height: 80px
   input[type="checkbox"],
   input[type="radio"]
     display: inline-block
     vertical-align: middle
     margin: 0 5px 0 0
-
   /*Form Tag end*/
-  span.has-error
-    background: none repeat scroll 0 0 #f00
-    color: #fff
-    display: inline-block
-    font-size: 14px
-    margin-top: 10px
-    padding: 4px 10px
-    position: relative
-    &:before
-      background: bg('error-bg.png') no-repeat scroll center center rgba(0, 0, 0, 0)
-      content: ""
-      display: block
-      height: 6px
-      left: 12px
-      position: absolute
-      top: -6px
-      width: 12px
+  span,label
+    &.has-error
+      background: none repeat scroll 0 0 #f00
+      color: #fff
+      display: inline-block
+      font-size: 14px
+      margin-top: 10px
+      padding: 4px 10px
+      position: relative
+      &:before
+        background: bg('error-bg.png') no-repeat scroll center center rgba(0, 0, 0, 0)
+        content: ""
+        display: block
+        height: 6px
+        left: 12px
+        position: absolute
+        top: -6px
+        width: 12px
   /*Common Buttons*/
+  $pad: 10px 
   a.box-btn,
   button.box-btn,
   input[type=button],
@@ -553,44 +537,36 @@
   input[type=submit]
     display: inline-block
     margin: 0 5px 0 0
-    background-color: $boxBtnBg
+    background-color: $pc
     border: none
     cursor: pointer
-    padding: 15px 25px
-    color: $boxBtnColor
-    font: 400 em(16) $pf
+    padding: $pad 15px
+    color: lighten($pc, 100%)
+    font: 400 rem(16) $pf
     letter-spacing: 2px
     text-transform: uppercase
     vertical-align: middle
     text-decoration: none
     text-align: center
-    @include transition
+    +transition
     &.full-btn
       display: block
       width: 100%
-
+      margin: 0
     &.rounded
       border-radius: 50px
-
-    &.active,
-    &:hover
-      background-color: $boxBtnBgHvr
-
+    &.active,&:hover
+      background-color: lighten($pc, 20)
     &.secondary-btn
-      background-color: #fff
-      border: 1px solid #bdbdbd
-      color: #bdbdbd
-      &.active,
-      &:hover
-        // background-color: $secondBoxBtnBghvr
-
-
-
+      background-color: $sc
+      color: lighten($sc, 100%)
+      &.active,&:hover
+        background-color: lighten($sc, 10)
   /*hack for mozzila */
   @-moz-document url-prefix()
     a.box-btn
-      padding-top: 16px
-      padding-bottom: 16px
+      padding-top: $pad + 1px
+      padding-bottom: $pad + 1px
 
 
   /*hack for mozzila end*/
@@ -623,20 +599,20 @@
           .col
             width: unquote(100 / $i + '%')
       dt
-        @include clrfix
+        +clrfix
         li
           .col
             font: 600 16px $pf
             background-color: #ddd
       dd
-        @include clrfix
+        +clrfix
         li
-          @include clrfix
+          +clrfix
           .col
             font: 400 16px $pf
-  @include renderInto(0,1024)
+  +renderInto(0,1024)
     .responsive-table
-      @include clrfix
+      +clrfix
       dl
         margin: 0 -1%
         dt
@@ -657,7 +633,7 @@
 
 
 
-  @include renderInto(0,640)
+  +renderInto(0,640)
     .responsive-table
       dl
         margin: 0
@@ -668,7 +644,7 @@
 
 
 
-  @include renderInto(0,320)
+  +renderInto(0,320)
     .responsive-table
       dl
         dd
@@ -703,12 +679,12 @@
 
 
 
-=listItem($types...)
+=listItrem($types...)
   ol.list,
   ul.list
     margin-left: 27px
     padding-bottom: 14px
-    font: em(20) $sf
+    font: rem(20) $sf
     li
       padding: 5px 0 5px 7px
 
@@ -750,7 +726,7 @@
   /*Pagination*/
   .pagination
     padding-bottom: 20px
-    @include clrfix
+    +clrfix
     &.at-right
       text-align: right
 
@@ -827,7 +803,7 @@
     th
       background: #444
       color: #fff
-      font-size: em(16)
+      font-size: rem(16)
       text-transform: uppercase
       @extend %td
 
