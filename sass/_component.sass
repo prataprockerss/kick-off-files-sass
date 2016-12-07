@@ -344,7 +344,7 @@
     vertical-align: middle
   .container
     margin: 0 auto
-    width: 100%
+    width: 96%
     max-width: $cntMxWidth
   .fl
     float: left
@@ -357,13 +357,8 @@
   .text-center
     text-align: center
   p
-    font: 300 rem($para-size) / rem($para-line-height) $fv1
-    letter-spacing: 2px
-    padding-bottom: 14px
-    &.info
-      background: bg('icon-info.png') no-repeat scroll left center
-      font: 16px "Open Sans",serif
-      padding: 10px 0 10px 33px
+    font: 300 rem(16) / rem(24) $sf
+    padding-bottom: 12px
 
 
   // including clear
@@ -371,10 +366,9 @@
   // heading property
   %h1,
   h1
-    color: $heading-color
-    // letter-spacing: 2px
-    font: 400 rem($heading-size) $pf
-    padding-bottom: $headingSpacer
+    color: $pc
+    font: rem($heading-size) $pf
+    padding-bottom: 12px
 
   +headings($heading-size-differnce)
   .desktop-only
@@ -494,8 +488,7 @@
     font: rem(12) $pf
     outline: none
     +transition
-    &:active,
-    &:focus
+    &:active,&:focus
       outline: none
   select
     background: none
@@ -529,14 +522,14 @@
         top: -6px
         width: 12px
   /*Common Buttons*/
-  $pad: 10px 
+  $pad: 10px
   a.box-btn,
   button.box-btn,
   input[type=button],
   input[type=reset],
   input[type=submit]
     display: inline-block
-    margin: 0 5px 0 0
+    margin: 5px
     background-color: $pc
     border: none
     cursor: pointer
@@ -562,18 +555,18 @@
       color: lighten($sc, 100%)
       &.active,&:hover
         background-color: lighten($sc, 10)
+    &:active,&:focus
+      outline: none
   /*hack for mozzila */
   @-moz-document url-prefix()
     a.box-btn
       padding-top: $pad + 1px
       padding-bottom: $pad + 1px
-
-
   /*hack for mozzila end*/
   // Common buttons end
+
   // Custom input types
   .input-type-select
-    // border: 1px solid #ddd
     overflow: hidden
     position: relative
     &:after
@@ -610,7 +603,7 @@
           +clrfix
           .col
             font: 400 16px $pf
-  +renderInto(0,1024)
+  +mq(1024px)
     .responsive-table
       +clrfix
       dl
@@ -625,15 +618,11 @@
           margin: 0 1% 20px
           li
             float: none
-            &:first-child
-              background: #ddd
+            &.primary
+              background: $sc
+              color: lighten($sc, 100%)
 
-
-
-
-
-
-  +renderInto(0,640)
+  +mq(640px)
     .responsive-table
       dl
         margin: 0
@@ -644,7 +633,7 @@
 
 
 
-  +renderInto(0,320)
+  +mq(320px)
     .responsive-table
       dl
         dd
@@ -656,11 +645,13 @@
 
 
 
-=renderInto($minSize,$maxsize)
-  $maxViewPort: max-width
-  $minViewPort: min-width
-  @media ( $minViewPort : ($minSize + px)) and ( $maxViewPort : ($maxsize + px))
-    @content
+=mq($arg...)
+  @if length($arg) == 1
+    @media (max-width: $arg)
+      @content
+  @else if length($arg) == 2
+    @media (min-width: nth($arg,1)) and (max-width: nth($arg,2))
+      @content
 
 
 =grid($ext,$totalClums:12)

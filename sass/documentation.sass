@@ -1,0 +1,47 @@
+@import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700|Roboto:300,400,500,700,900)
+@import "_component.sass"
+$pf : 'Roboto', sans-serif
+$sf : 'Droid Serif', serif
+
+@import "_rainbow.sass"
++reset
++global
++form
+
+
+section
+  padding-bottom: rem(20)
+  header
+    text-transform: uppercase
+    font: rem(25) $pf
+    letter-spacing: 2px
+    color: $pc
+    padding: rem(10) 0
+  article
+    font: rem(18) $sf
+  &.colors
+    article
+      ul
+        +clrfix
+      li
+        float: left
+        width: 20%
+        text-align: center
+        .color
+          display: inline-block
+          width: 70px
+          height: 70px
+          &.pc
+            background-color: $pc
+          &.sc
+            background-color: $sc
+          &.cv1
+            background-color: $cv1
+          &.cv2
+            background-color: $cv2
+        span
+          display: block
+          text-align: center
+          padding: 5px 0
+          font: rem(18) $sf
+    .copy-to-clipboard
