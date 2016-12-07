@@ -311,8 +311,8 @@
 
 
 =wh($prop)
-  width: $prop +px
-  height: $prop +px
+  width: $prop
+  height: $prop
 
 =global
   \:root
@@ -603,7 +603,7 @@
           +clrfix
           .col
             font: 400 16px $pf
-  +mq(1024px)
+  +renderInto(1024px)
     .responsive-table
       +clrfix
       dl
@@ -622,30 +622,21 @@
               background: $sc
               color: lighten($sc, 100%)
 
-  +mq(640px)
+  +renderInto(640px)
     .responsive-table
       dl
         margin: 0
         dd
           width: 100%
           margin: 0 0 20px
-
-
-
-
-  +mq(320px)
+  +renderInto(320px)
     .responsive-table
       dl
         dd
           .col
             width: 100% !important
 
-
-
-
-
-
-=mq($arg...)
+=renderInto($arg...)
   @if length($arg) == 1
     @media (max-width: $arg)
       @content
@@ -653,11 +644,18 @@
     @media (min-width: nth($arg,1)) and (max-width: nth($arg,2))
       @content
 
+//mgrid stands for manual grid
+=mgrid($col,$spc)
+  width: (100% / $col) - $spc
+  margin-right: $spc
+  margin-bottom: $spc
+  &:nth-child(#{$col}n+#{$col})
+    margin-right: 0
+
 
 =grid($ext,$totalClums:12)
   .grid-layout
     margin: 0 -1%
-
   .grid-#{$ext}
     float: left
     padding: 0 1%
