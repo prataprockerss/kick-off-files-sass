@@ -420,19 +420,10 @@ span.has-error, label.has-error {
   background: none repeat scroll 0 0 #f00;
   color: #fff;
   display: inline-block;
-  font-size: 14px;
+  font-size: 12px;
   margin-top: 10px;
   padding: 4px 10px;
   position: relative; }
-  span.has-error:before, label.has-error:before {
-    background: url("../images/error-bg.png") no-repeat scroll center center transparent;
-    content: "";
-    display: block;
-    height: 6px;
-    left: 12px;
-    position: absolute;
-    top: -6px;
-    width: 12px; }
 
 /*Common Buttons */
 a.box-btn,
