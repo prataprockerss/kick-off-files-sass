@@ -464,14 +464,6 @@
         +transform(rotate(30deg))
         opacity: 0
 
-
-
-
-
-
-
-
-
 =form
   /*form tag*/
   input[type="date"],
@@ -508,19 +500,10 @@
       background: none repeat scroll 0 0 #f00
       color: #fff
       display: inline-block
-      font-size: 14px
+      font-size: 12px
       margin-top: 10px
       padding: 4px 10px
       position: relative
-      &:before
-        background: bg('error-bg.png') no-repeat scroll center center rgba(0, 0, 0, 0)
-        content: ""
-        display: block
-        height: 6px
-        left: 12px
-        position: absolute
-        top: -6px
-        width: 12px
   /*Common Buttons*/
   $pad: 10px
   a.box-btn,
@@ -603,7 +586,7 @@
           +clrfix
           .col
             font: 400 16px $pf
-  +mq(1024px)
+  +mq(max,1024px)
     .responsive-table
       +clrfix
       dl
@@ -622,7 +605,7 @@
               background: $sc
               color: lighten($sc, 100%)
 
-  +mq(640px)
+  +mq(max,640px)
     .responsive-table
       dl
         margin: 0
@@ -630,26 +613,27 @@
           width: 100%
           margin: 0 0 20px
 
-
-
-
-  +mq(320px)
+  +mq(max,320px)
     .responsive-table
       dl
         dd
           .col
             width: 100% !important
 
-
-
-
+=cg($col,$spc)
+  width: (100% - ($spc * ($col - 1))) / $col
+  margin-right: $spc
+  margin-bottom: $spc
+  float: left
+  &:nth-child(#{$col}n+#{$col})
+    margin-right: 0
 
 
 =mq($arg...)
-  @if length($arg) == 1
-    @media (max-width: $arg)
+  @if type_of(nth($arg,1)) == string
+    @media (#{nth($arg,1)}-width: nth($arg,2))
       @content
-  @else if length($arg) == 2
+  @else
     @media (min-width: nth($arg,1)) and (max-width: nth($arg,2))
       @content
 
